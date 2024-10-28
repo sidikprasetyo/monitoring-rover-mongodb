@@ -24,10 +24,10 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Define a sensor data schema
 const sensorDataSchema = new mongoose.Schema({
-    suhu: Number,
-    kelembapan: Number,
-    co2: Number,
-    nh3: Number,
+    temperature: Number,
+    humidity: Number,
+    carbonDioxide: Number,
+    ammonia: Number,
     timestamp: { type: Date, default: Date.now }
 });
 
@@ -37,10 +37,10 @@ const SensorData = mongoose.model('SensorData', sensorDataSchema);
 // Generate dummy sensor data every 5 seconds
 setInterval(async () => {
   const sensorData = {
-    suhu: parseFloat((Math.random() * 10 + 20).toFixed(1)), // Generate random suhu between 20-30°C
-    kelembapan: parseFloat((Math.random() * 40 + 40).toFixed(1)), // Generate random kelembapan between 40-80%
-    co2: parseFloat((Math.random() * 500 + 300).toFixed(1)), // Generate random CO2 between 300-800 ppm
-    nh3: parseFloat((Math.random() * 30).toFixed(1)) // Generate random NH3 between 0-30 ppm
+    temperature: parseFloat((Math.random() * 10 + 20).toFixed(1)), // Generate random suhu between 20-30°C
+    humidity: parseFloat((Math.random() * 40 + 40).toFixed(1)), // Generate random kelembapan between 40-80%
+    carbonDioxide: parseFloat((Math.random() * 500 + 300).toFixed(1)), // Generate random CO2 between 300-800 ppm
+    ammonia: parseFloat((Math.random() * 30).toFixed(1)) // Generate random NH3 between 0-30 ppm
   };
 
   // Save sensor data to MongoDB
