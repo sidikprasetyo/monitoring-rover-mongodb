@@ -34,22 +34,37 @@ const sensorDataSchema = new mongoose.Schema({
 // Create a model from the schema
 const SensorData = mongoose.model('SensorData', sensorDataSchema);
 
+// Endpoint untuk menerima data dari ESP32
+app.post('/api/sensor-data', async (req, res) => {
+  try {
+      const sensorData = new SensorData(req.body);
+      await sensorData.save();
+      
+      // Emit data ke semua klien yang terhubung via Socket.IO
+      io.emit('sensor-data', req.body);
+
+      res.status(201).json({ message: 'Data received and saved successfully' });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+});
+
 // Generate dummy sensor data every 5 seconds
-setInterval(async () => {
-  const sensorData = {
-    temperature: parseFloat((Math.random() * 10 + 20).toFixed(1)), // Generate random suhu between 20-30°C
-    humidity: parseFloat((Math.random() * 40 + 40).toFixed(1)), // Generate random kelembapan between 40-80%
-    carbonDioxide: parseFloat((Math.random() * 500 + 300).toFixed(1)), // Generate random CO2 between 300-800 ppm
-    ammonia: parseFloat((Math.random() * 30).toFixed(1)) // Generate random NH3 between 0-30 ppm
-  };
+// setInterval(async () => {
+//   const sensorData = {
+//     temperature: parseFloat((Math.random() * 10 + 20).toFixed(1)), // Generate random suhu between 20-30°C
+//     humidity: parseFloat((Math.random() * 40 + 40).toFixed(1)), // Generate random kelembapan between 40-80%
+//     carbonDioxide: parseFloat((Math.random() * 500 + 300).toFixed(1)), // Generate random CO2 between 300-800 ppm
+//     ammonia: parseFloat((Math.random() * 30).toFixed(1)) // Generate random NH3 between 0-30 ppm
+//   };
 
-  // Save sensor data to MongoDB
-  const newSensorData = new SensorData(sensorData);
-  await newSensorData.save();
+//   // Save sensor data to MongoDB
+//   const newSensorData = new SensorData(sensorData);
+//   await newSensorData.save();
 
-  // Emit data to clients via Socket.IO
-  io.emit('sensor-data', sensorData);
-}, 5000);
+//   // Emit data to clients via Socket.IO
+//   io.emit('sensor-data', sensorData);
+// }, 5000);
 
 // Set up Socket.IO connection
 io.on('connection', (socket) => {
