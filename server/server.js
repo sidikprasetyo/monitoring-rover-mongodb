@@ -49,23 +49,6 @@ app.post('/api/sensor-data', async (req, res) => {
   }
 });
 
-// Generate dummy sensor data every 5 seconds
-// setInterval(async () => {
-//   const sensorData = {
-//     temperature: parseFloat((Math.random() * 10 + 20).toFixed(1)), // Generate random suhu between 20-30°C
-//     humidity: parseFloat((Math.random() * 40 + 40).toFixed(1)), // Generate random kelembapan between 40-80%
-//     carbonDioxide: parseFloat((Math.random() * 500 + 300).toFixed(1)), // Generate random CO2 between 300-800 ppm
-//     ammonia: parseFloat((Math.random() * 30).toFixed(1)) // Generate random NH3 between 0-30 ppm
-//   };
-
-//   // Save sensor data to MongoDB
-//   const newSensorData = new SensorData(sensorData);
-//   await newSensorData.save();
-
-//   // Emit data to clients via Socket.IO
-//   io.emit('sensor-data', sensorData);
-// }, 5000);
-
 // Set up Socket.IO connection
 io.on('connection', (socket) => {
   console.log('Client connected');
@@ -85,7 +68,7 @@ app.get('/api/sensor-data', async (req, res) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
 
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
