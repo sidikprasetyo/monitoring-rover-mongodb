@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const mongoose = require('mongoose'); // Import mongoose
+const mongoose = require('mongoose');
 require ('dotenv').config();
 
 // Setup Express and Socket.IO
